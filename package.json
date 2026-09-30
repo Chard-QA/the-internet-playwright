@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Playwright UI and API automation practice project",
   "main": "index.js",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "test": "npx playwright test",
     "test:ui": "npx playwright test tests/ui",
