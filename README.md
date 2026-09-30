@@ -1,169 +1,437 @@
-# The Internet-Heroku Automation
+# The Internet Playwright Automation
+
+Playwright + TypeScript automation project for practicing **UI testing** against The Internet Heroku application and **API testing** against JSONPlaceholder.
+
+---
 
 ## Project Overview
 
-This project uses Playwright and TypeScript to automate UI testing for The Internet website and API testing for JSONPlaceholder.
+This project demonstrates UI and API automation using **Playwright Test** with **TypeScript**.
 
-The project follows the **Page Object Model (POM)** for UI tests, with reusable page objects, separate test data files, and parameterized login tests. It covers successful and unsuccessful login attempts, dynamic content changes, checkbox interactions, and API requests for retrieving and creating users.
+The UI automation suite targets **The Internet** application and follows the **Page Object Model (POM)** to separate page-specific locators, reusable actions, and validation methods from the test scenarios.
 
-The framework uses Playwright’s built-in HTML reporter to display test results and provides separate configurations for UI and API tests.
+The current UI coverage includes:
+
+- Login validation
+- Dynamic content validation
+- Checkbox interaction
+
+The API automation suite targets **JSONPlaceholder** and covers:
+
+- Retrieving all users
+- Retrieving a single user by ID
+- Creating a new user
+- Response status validation
+- Response body validation
+- Field type validation
+- Nested object validation
+
+The UI suite runs across **Chromium, Firefox, and WebKit**, while API tests execute separately through a dedicated Playwright API project.
+
+---
 
 ## Framework Used
 
 This project uses **Playwright Test** with **TypeScript**.
 
-**Playwright Test** was selected because it supports both browser-based UI testing and API testing within a single framework. Its built-in locators and auto-waiting help make UI interactions reliable, while isolated browser contexts prevent tests from sharing browser state. Built-in assertions and HTML reporting support result verification and failure investigation.
+### Playwright Test
 
-**TypeScript** was selected because I am familiar with using it for test automation. Its static typing and editor support help identify coding errors during development and make page objects, test data, and test scripts easier to maintain.
+Playwright Test is used for both UI and API automation.
+
+For UI testing, the framework provides:
+
+- Cross-browser support
+- Built-in locators
+- Auto-waiting
+- Web-first assertions
+- Browser-context isolation
+- HTML reporting
+
+For API testing, Playwright's built-in `request` fixture is used to send and validate REST API requests.
+
+### TypeScript
+
+TypeScript is used for:
+
+- Test scripts
+- Page Object classes
+- Test data
+- API payloads
+- Type-safe automation development
+
+Its static typing and editor support help identify coding issues during development and improve framework maintainability.
+
+---
 
 ## Design Pattern
 
-The project follows the **Page Object Model (POM)** for UI testing. Page classes contain UI locators, reusable actions, and validation methods. This keeps page-specific logic separate from test scenarios and makes UI changes easier to maintain.
+The UI automation follows the **Page Object Model (POM)**.
 
-- **pages/** contains the page classes used by the UI tests.
-- **tests/** contains test cases grouped into UI and API folders. UI tests call page-object methods to perform actions and verify results, while API tests use Playwright’s `request` fixture directly.
-- **test-data/** contains login test data and the new-user payload, keeping reusable input data separate from test logic.
+Page classes contain:
+
+- UI locators
+- Reusable actions
+- Navigation methods
+- Validation methods
+
+This separates page-specific implementation from the test scenarios and reduces duplicated code.
+
+The project is organized into:
+
+- `pages/` — reusable Page Object classes
+- `tests/ui/` — UI automation test specifications
+- `tests/api/` — API automation test specifications
+- `test-data/` — reusable UI and API test data
+
+---
 
 ## Tech Stack
 
 | Technology               | Purpose                                                    |
 | ------------------------ | ---------------------------------------------------------- |
 | Playwright Test          | UI automation, API testing, assertions, and test execution |
-| TypeScript               | Typed test scripts, page objects, and test data            |
-| Node.js                  | Runtime for executing Playwright and project tooling       |
-| npm                      | Dependency installation and command execution              |
-| Playwright HTML Reporter | Test results, execution details, and failure reporting     |
+| TypeScript               | Test scripts, Page Objects, and test data                  |
+| Node.js                  | JavaScript runtime environment                             |
+| npm                      | Dependency installation and project scripts                |
+| Git                      | Source control                                             |
+| GitHub                   | Repository hosting                                         |
+| Playwright HTML Reporter | Test execution reporting and failure investigation         |
+
+---
+
+## Applications Under Test
+
+### UI Testing
+
+**The Internet**
+
+```text
+https://the-internet.herokuapp.com
+```
+
+Current UI modules:
+
+- Login
+- Dynamic Content
+- Checkboxes
+
+### API Testing
+
+**JSONPlaceholder**
+
+```text
+https://jsonplaceholder.typicode.com
+```
+
+Current API resource:
+
+```text
+/users
+```
+
+---
 
 ## Project Structure
 
-The project follows the **Page Object Model (POM)** for UI testing, separating test scenarios from page-specific locators, actions, and validation methods. This reduces duplication and makes page changes easier to maintain.
-
-UI and API tests are organized into separate folders. Login test data and the POST request payload are stored separately from the test scripts.
-
 ```text
-internet-heroku/
+the-internet-playwright/
+│
 ├── pages/
-│   ├── LoginPage.ts                    # Login actions and validations
-│   ├── DynamicContentPage.ts           # Capture and compare dynamic text
-│   └── CheckboxesInteractionPages.ts   # Checkbox actions and state validations
+│   ├── LoginPage.ts
+│   ├── DynamicContentPage.ts
+│   └── CheckboxesInteractionPages.ts
+│
 ├── test-data/
-│   ├── login.ts                       # Login inputs and expected results
-│   └── newUser.ts                     # POST request payload
+│   ├── login.ts
+│   └── newUser.ts
+│
 ├── tests/
 │   ├── ui/
-│   │   ├── login.spec.ts               # Login scenarios
-│   │   ├── dynamicContent.spec.ts      # Content changes after refresh
-│   │   └── checkboxesInteraction.spec.ts # Checkbox state changes
+│   │   ├── login.spec.ts
+│   │   ├── dynamicContent.spec.ts
+│   │   └── checkboxesInteraction.spec.ts
+│   │
 │   └── api/
-│       └── user.spec.ts                # GET and POST user API tests
-├── playwright-report/                 # Generated HTML test report
-├── playwright.config.ts               # UI and API project configuration
-├── package.json                       # Project metadata and dependencies
-├── package-lock.json                  # Locked dependency versions
-├── README.md                          # Project documentation and run instructions
-└── .gitignore                         # Files excluded from Git tracking
+│       └── user.spec.ts
+│
+├── playwright.config.ts
+├── package.json
+├── package-lock.json
+├── README.md
+└── .gitignore
 ```
+
+### Folder Responsibilities
+
+`pages/`
+
+Contains Page Object classes used by the UI tests.
+
+`test-data/`
+
+Contains reusable test inputs and API request payloads.
+
+`tests/ui/`
+
+Contains browser-based UI automation scenarios.
+
+`tests/api/`
+
+Contains REST API automation scenarios.
+
+---
 
 ## Test Data Handling
 
-Test data is stored in the `test-data` folder to keep reusable inputs separate from test logic.
+Reusable test data is stored separately from the test logic.
 
-- **login.ts** stores credentials, expected messages, and expected URL paths for the six login scenarios.
-- **newUser.ts** contains the user payload sent in the POST request for API-003.
+### `login.ts`
 
-Tests import these files to access the data, making it easier to update inputs without changing the test steps. API-002’s expected user details are defined directly in the test for comparison with the response.
+Contains the data used by the parameterized login tests, including:
+
+- Test ID
+- Test name
+- Username
+- Password
+- Expected validation message
+- Expected URL path
+
+The login suite currently contains **6 parameterized scenarios**.
+
+### `newUser.ts`
+
+Contains the request payload used by:
+
+```text
+API-003: Create a New User
+```
+
+This keeps the POST request data separate from the API test logic.
+
+---
 
 ## Test Coverage
 
-The project contains 11 unique automated test cases covering four functional areas.
+The project currently contains **11 unique automated test cases**.
 
-| Scenario        | Tests | Coverage                                                                                                                                 |
-| --------------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Login           |     6 | Valid credentials, invalid username, invalid password, both fields empty, empty username, and empty password                             |
-| Dynamic Content |     1 | Verify that three text blocks are captured before and after refreshing and that the combined text content differs after refreshing.      |
-| Checkboxes      |     1 | Check the first checkbox, uncheck the second, and verify both states                                                                     |
-| API Validation  |     3 | Retrieve all users and validate field types, retrieve one user and verify its details, and create a user with response and ID validation |
+### UI Test Coverage
 
-Login tests verify feedback messages and destination URLs. API tests verify response status codes and response bodies. The POST test also checks that the returned ID is a positive number and is not present in the existing user list.
+| Module               | Tests | Coverage                                                                                                     |
+| -------------------- | ----: | ------------------------------------------------------------------------------------------------------------ |
+| Login                |     6 | Valid credentials, invalid username, invalid password, empty credentials, empty username, and empty password |
+| Dynamic Content      |     1 | Verify that displayed text changes after refreshing the page                                                 |
+| Checkbox Interaction |     1 | Check the first checkbox, uncheck the second checkbox, and verify their states                               |
+
+### API Test Coverage
+
+| Test ID | Method | Scenario                                                      |
+| ------- | ------ | ------------------------------------------------------------- |
+| API-001 | GET    | Retrieve all users and validate field data types              |
+| API-002 | GET    | Retrieve user ID `1` and validate expected user details       |
+| API-003 | POST   | Create a new user and validate returned data and generated ID |
+
+### API Validation Coverage
+
+The API tests currently validate:
+
+- HTTP status codes
+- Array responses
+- Response object properties
+- Primitive data types
+- Nested address properties
+- Geographic data
+- Company properties
+- Exact response values
+- POST request payload matching
+- Generated user IDs
+
+---
+
+## Playwright Projects
+
+The framework separates UI and API execution through Playwright projects.
+
+| Project  | Test Scope     |
+| -------- | -------------- |
+| Chromium | UI tests       |
+| Firefox  | UI tests       |
+| WebKit   | UI tests       |
+| API      | API tests only |
+
+The UI suite is executed across all three browser engines.
+
+The API suite runs only once because it uses Playwright's `request` fixture and does not require browser execution.
+
+---
 
 ## Prerequisites
 
-- Node.js and npm installed.
-- Internet access to download dependencies and access the test websites.
+Before running the project, make sure you have:
+
+- Node.js
+- npm
+- Git
+- Internet access
+
+---
 
 ## Installation
 
-1. Extract the project ZIP.
-2. Open a terminal in the project root—the folder containing `package.json`.
-3. Install the project dependencies:
+### 1. Clone the Repository
 
-   ```bash
-   npm ci
-   ```
+```bash
+git clone https://github.com/KingChard/the-internet-playwright.git
+cd the-internet-playwright
+```
 
-4. Install the supported browsers (Chromium, Firefox, and WebKit):
+### 2. Install Dependencies
 
-   ```bash
-   npx playwright install
-   ```
+```bash
+npm ci
+```
 
-The `node_modules` folder is generated during dependency installation and is not included in the submission.
+### 3. Install Playwright Browsers
+
+```bash
+npx playwright install
+```
+
+For Linux or CI environments:
+
+```bash
+npx playwright install --with-deps
+```
+
+---
 
 ## Running the Tests
 
-Run these commands from the project root.
-
-### Run all tests
+### Run the Complete Test Suite
 
 ```bash
-npx playwright test
+npm test
 ```
 
-Runs UI tests on Chromium, Firefox, and WebKit, plus API tests under the API project.
+This runs:
 
-### Run tests with visible browsers
+```text
+UI tests
+├── Chromium
+├── Firefox
+└── WebKit
+
+API tests
+└── API project
+```
+
+### Run UI Tests Only
 
 ```bash
-npx playwright test --headed
+npm run test:ui
 ```
 
-### Run a specific browser
+### Run API Tests Only
+
+```bash
+npm run test:api
+```
+
+### Run UI Tests in Headed Mode
+
+```bash
+npm run test:ui -- --headed
+```
+
+### Run a Specific Browser
+
+Chromium:
 
 ```bash
 npx playwright test --project=chromium
+```
+
+Firefox:
+
+```bash
 npx playwright test --project=firefox
+```
+
+WebKit:
+
+```bash
 npx playwright test --project=webkit
 ```
 
-### Run API tests only
+### Run a Specific Test
 
-```bash
-npx playwright test --project=api
-```
-
-### Run a specific test
+Example:
 
 ```bash
 npx playwright test --project=chromium -g "TC-001"
 ```
 
+### Run a Specific API Test
+
+Example:
+
+```bash
+npm run test:api -- -g "API-001"
+```
+
+---
+
+## Available npm Scripts
+
+| Command            | Purpose                                       |
+| ------------------ | --------------------------------------------- |
+| `npm test`         | Run the complete UI and API test suite        |
+| `npm run test:ui`  | Run UI tests                                  |
+| `npm run test:api` | Run API tests using the dedicated API project |
+| `npm run report`   | Open the latest Playwright HTML report        |
+
+---
+
 ## Test Reporting
 
-The project uses Playwright’s built-in HTML reporter to display test results, execution times, and failure details.
+The project uses Playwright's built-in **HTML Reporter**.
+
+The report provides information such as:
+
+- Test status
+- Test duration
+- Browser/project
+- Failure details
+- Error messages
+- Test steps and execution information
 
 To open the latest report:
 
 ```bash
-npx playwright show-report
+npm run report
 ```
 
-Reports are saved in the `playwright-report` folder. Run the complete suite before submission so the report includes all configured projects.
+The generated report is stored locally in:
+
+```text
+playwright-report/
+```
+
+The `playwright-report` folder is excluded from Git tracking because it is generated automatically during test execution.
+
+---
 
 ## Test Execution Results
 
-The latest complete test run finished with **27 passed and 0 failed**.
+The current complete test suite finishes with:
 
-The project contains **11 unique test cases**: 8 UI cases executed across Chromium, Firefox, and WebKit, plus 3 API cases executed once under the API project.
+```text
+27 passed
+0 failed
+```
+
+The project contains **11 unique test cases**.
+
+UI tests are executed across Chromium, Firefox, and WebKit, while API tests execute once through the dedicated API project.
 
 | Test Module          | Unique Test Cases | Executions |
 | -------------------- | ----------------: | ---------: |
@@ -173,4 +441,29 @@ The project contains **11 unique test cases**: 8 UI cases executed across Chromi
 | API Validation       |                 3 |          3 |
 | **Total**            |            **11** |     **27** |
 
-The complete HTML report is included in the `playwright-report` folder.
+---
+
+## Current Framework Capabilities
+
+- Playwright + TypeScript
+- Page Object Model
+- Reusable Page Object methods
+- Parameterized login testing
+- Centralized test data
+- Cross-browser UI automation
+- Chromium testing
+- Firefox testing
+- WebKit testing
+- Dedicated API project
+- REST API GET testing
+- REST API POST testing
+- Request payload validation
+- Response body validation
+- Nested JSON validation
+- Data type assertions
+- Playwright HTML reporting
+- Separate UI and API execution
+- npm test scripts
+- Git-ready project structure
+
+---
