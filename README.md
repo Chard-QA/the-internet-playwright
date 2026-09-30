@@ -28,6 +28,8 @@ The API automation suite targets **JSONPlaceholder** and covers:
 
 The UI suite runs across **Chromium, Firefox, and WebKit**, while API tests execute separately through a dedicated Playwright API project.
 
+The project also includes **GitHub Actions Continuous Integration (CI)** for automatic test execution on pushes and pull requests to the `main` branch.
+
 ---
 
 ## Framework Used
@@ -46,6 +48,9 @@ For UI testing, the framework provides:
 - Web-first assertions
 - Browser-context isolation
 - HTML reporting
+- Screenshots on failure
+- Video recording for failed tests
+- Trace collection for retried tests
 
 For API testing, Playwright's built-in `request` fixture is used to send and validate REST API requests.
 
@@ -82,6 +87,7 @@ The project is organized into:
 - `tests/ui/` — UI automation test specifications
 - `tests/api/` — API automation test specifications
 - `test-data/` — reusable UI and API test data
+- `.github/workflows/` — GitHub Actions CI workflow
 
 ---
 
@@ -91,11 +97,13 @@ The project is organized into:
 | ------------------------ | ---------------------------------------------------------- |
 | Playwright Test          | UI automation, API testing, assertions, and test execution |
 | TypeScript               | Test scripts, Page Objects, and test data                  |
-| Node.js                  | JavaScript runtime environment                             |
+| Node.js 24               | JavaScript runtime environment                             |
 | npm                      | Dependency installation and project scripts                |
 | Git                      | Source control                                             |
-| GitHub                   | Repository hosting                                         |
+| GitHub                   | Repository hosting and version control                     |
+| GitHub Actions           | Continuous Integration and automated test execution        |
 | Playwright HTML Reporter | Test execution reporting and failure investigation         |
+| Playwright Trace Viewer  | Detailed debugging of retried and failed tests             |
 
 ---
 
@@ -135,6 +143,10 @@ Current API resource:
 
 ```text
 the-internet-playwright/
+│
+├── .github/
+│   └── workflows/
+│       └── playwright.yaml          # GitHub Actions CI workflow
 │
 ├── pages/
 │   ├── LoginPage.ts
@@ -178,6 +190,10 @@ Contains browser-based UI automation scenarios.
 `tests/api/`
 
 Contains REST API automation scenarios.
+
+`.github/workflows/`
+
+Contains the GitHub Actions workflow used for automated test execution.
 
 ---
 
@@ -268,7 +284,7 @@ The API suite runs only once because it uses Playwright's `request` fixture and 
 
 Before running the project, make sure you have:
 
-- Node.js
+- Node.js 24.x
 - npm
 - Git
 - Internet access
@@ -362,7 +378,7 @@ WebKit:
 npx playwright test --project=webkit
 ```
 
-### Run a Specific Test
+### Run a Specific UI Test
 
 Example:
 
@@ -391,9 +407,17 @@ npm run test:api -- -g "API-001"
 
 ---
 
-## Test Reporting
+## Test Reporting and Debugging Artifacts
 
 The project uses Playwright's built-in **HTML Reporter**.
+
+The HTML reporter is configured with:
+
+```text
+open: never
+```
+
+so the report is generated without automatically opening after execution.
 
 The report provides information such as:
 
@@ -402,21 +426,111 @@ The report provides information such as:
 - Browser/project
 - Failure details
 - Error messages
-- Test steps and execution information
+- Test steps
+- Execution information
 
-To open the latest report:
+To open the latest report manually:
 
 ```bash
 npm run report
 ```
 
-The generated report is stored locally in:
+### Failure Artifacts
+
+The framework also captures debugging artifacts when tests fail.
+
+**Screenshots**
+
+```text
+only-on-failure
+```
+
+Screenshots are captured automatically when a test fails.
+
+**Videos**
+
+```text
+retain-on-failure
+```
+
+Videos are retained only when a test fails.
+
+**Traces**
+
+```text
+on-first-retry
+```
+
+A Playwright trace is collected when a failed test is retried for the first time.
+
+Generated artifacts are stored locally under folders such as:
 
 ```text
 playwright-report/
+test-results/
 ```
 
-The `playwright-report` folder is excluded from Git tracking because it is generated automatically during test execution.
+These generated folders are excluded from Git tracking.
+
+---
+
+## Continuous Integration
+
+The project uses **GitHub Actions** for Continuous Integration.
+
+The workflow is located at:
+
+```text
+.github/workflows/playwright.yaml
+```
+
+The workflow runs automatically when:
+
+- Changes are pushed to the `main` branch
+- A pull request targets the `main` branch
+
+### CI Pipeline
+
+```text
+Push / Pull Request
+        ↓
+Checkout repository
+        ↓
+Setup Node.js 24
+        ↓
+Install dependencies using npm ci
+        ↓
+Install Playwright browsers and dependencies
+        ↓
+Run the complete Playwright test suite
+        ↓
+Generate Playwright reports and artifacts
+        ↓
+Upload Playwright artifacts
+```
+
+The GitHub Actions environment executes:
+
+```text
+UI
+├── Chromium
+├── Firefox
+└── WebKit
+
+API
+└── Dedicated API project
+```
+
+### CI Artifacts
+
+After execution, GitHub Actions uploads:
+
+```text
+playwright-report/
+test-results/
+```
+
+These artifacts can be downloaded from the workflow run for test analysis and debugging.
 
 ---
 
@@ -441,6 +555,8 @@ UI tests are executed across Chromium, Firefox, and WebKit, while API tests exec
 | API Validation       |                 3 |          3 |
 | **Total**            |            **11** |     **27** |
 
+The test suite has also been successfully executed through **GitHub Actions CI**.
+
 ---
 
 ## Current Framework Capabilities
@@ -462,8 +578,17 @@ UI tests are executed across Chromium, Firefox, and WebKit, while API tests exec
 - Nested JSON validation
 - Data type assertions
 - Playwright HTML reporting
+- Screenshots on test failure
+- Video retention on test failure
+- Playwright traces on retry
 - Separate UI and API execution
 - npm test scripts
-- Git-ready project structure
+- Node.js 24 environment
+- Git source control
+- GitHub repository hosting
+- GitHub Actions CI
+- Automated test execution on pushes to `main`
+- Automated test execution for pull requests targeting `main`
+- CI artifact upload for Playwright reports and test results
 
 ---
