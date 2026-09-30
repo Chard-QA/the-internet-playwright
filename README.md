@@ -1,5 +1,7 @@
 # The Internet Playwright Automation
 
+[![Playwright Tests](https://github.com/Chard-QA/the-internet-playwright/actions/workflows/playwright.yaml/badge.svg)](https://github.com/Chard-QA/the-internet-playwright/actions/workflows/playwright.yaml)
+
 Playwright + TypeScript automation project for practicing **UI testing** against The Internet Heroku application and **API testing** against JSONPlaceholder.
 
 ---
