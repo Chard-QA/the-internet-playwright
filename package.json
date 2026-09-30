@@ -1,0 +1,18 @@
+{
+  "name": "the-internet-playwright",
+  "version": "1.0.0",
+  "description": "Playwright UI and API automation practice project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test tests/ui",
+    "test:api": "npx playwright test --project=api",
+    "report": "npx playwright show-report"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.1"
+  }
+}
